@@ -52,7 +52,7 @@ public class ChessMatch {
             throw new ChessException("Position is no piece on souerce position");
         }
         if (!board.piece(position).isThereAnyPossibleMove()){
-            throw new ChessException("Position is no piece on souerce position");
+            throw new ChessException("There is no possible moves for the chosen piece");
         }
     }
 
