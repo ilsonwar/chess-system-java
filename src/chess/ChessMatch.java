@@ -75,9 +75,9 @@ public class ChessMatch {
 
         check = (testCheck(opponent(currentPlayer))) ? true : false;
 
-        if (testCheckMate(opponent(currentPlayer))){
+        if (testCheckMate(opponent(currentPlayer))) {
             checkMate = true;
-        }else {
+        } else {
             nextTurn();
         }
         return (ChessPiece) capturedPiece;
@@ -85,9 +85,11 @@ public class ChessMatch {
 
 
     private Piece makeMove(Position source, Position target) {
-        Piece p = board.removePiece(source);
+        ChessPiece p = (ChessPiece) board.removePiece(source);
+        p.increaseMoveCount();
         Piece capturedPiece = board.removePiece(target);
         board.placePiece(p, target);
+
         if (capturedPiece != null) {
             piecesOnTheBoard.remove(capturedPiece);
             capturedPieces.add(capturedPiece);
@@ -96,7 +98,8 @@ public class ChessMatch {
     }
 
     private void undoMove(Position source, Position target, Piece capturedPice) {
-        Piece p = board.removePiece(target);
+        ChessPiece p = (ChessPiece) board.removePiece(target);
+        p.decraseMoveCount();
         board.placePiece(p, source);
 
         if (capturedPice != null) {
@@ -165,13 +168,13 @@ public class ChessMatch {
             boolean[][] mat = p.possibleMoves();
             for (int i = 0; i < board.getRows(); i++) {
                 for (int j = 0; j < board.getColums(); j++) {
-                    if (mat[i][j]){
-                        Position source = ((ChessPiece)p).getChessPosition().toPosition();
+                    if (mat[i][j]) {
+                        Position source = ((ChessPiece) p).getChessPosition().toPosition();
                         Position target = new Position(i, j);
                         Piece capturedPiece = makeMove(source, target);
                         boolean testCheck = testCheck(color);
                         undoMove(source, target, capturedPiece);
-                        if (!testCheck){
+                        if (!testCheck) {
                             return false;
                         }
                     }
